@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: recipe_app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      # These are optional since mongo_db.py hardcodes host/db
+      MONGO_DB_HOST: mongodb
+      MONGO_DB_NAME: test_db
+    restart: always
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+
+volumes:
+  mongo_data:
